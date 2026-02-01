@@ -18,6 +18,7 @@ export const AgentDefaultsSchema = z
     model: z
       .object({
         primary: z.string().optional(),
+        execution: z.string().optional(),
         fallbacks: z.array(z.string()).optional(),
       })
       .strict()
@@ -145,6 +146,7 @@ export const AgentDefaultsSchema = z
             z
               .object({
                 primary: z.string().optional(),
+                execution: z.string().optional(),
                 fallbacks: z.array(z.string()).optional(),
               })
               .strict(),

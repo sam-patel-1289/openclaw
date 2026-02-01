@@ -51,6 +51,12 @@ export type EmbeddedRunAttemptParams = {
   model: Model<Api>;
   authStorage: AuthStorage;
   modelRegistry: ModelRegistry;
+  /** Execution model provider for dual-model architecture. */
+  executionProvider?: string;
+  /** Execution model id for dual-model architecture. */
+  executionModelId?: string;
+  /** Execution model for dual-model architecture (tool calls). */
+  executionModel?: Model<Api>;
   thinkLevel: ThinkLevel;
   verboseLevel?: VerboseLevel;
   reasoningLevel?: ReasoningLevel;
