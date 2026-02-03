@@ -13,6 +13,8 @@ export type AgentModelConfig =
   | {
       /** Primary model (provider/model). */
       primary?: string;
+      /** Execution model for tool calls (provider/model). Enables dual-model architecture. */
+      execution?: string;
       /** Per-agent model fallbacks (provider/model). */
       fallbacks?: string[];
     };

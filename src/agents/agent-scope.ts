@@ -150,6 +150,22 @@ export function resolveAgentModelFallbacksOverride(
   return Array.isArray(raw.fallbacks) ? raw.fallbacks : undefined;
 }
 
+/**
+ * Resolve the execution model for dual-model architecture.
+ * When configured, this model handles tool execution while primary handles planning.
+ */
+export function resolveAgentModelExecution(
+  cfg: OpenClawConfig,
+  agentId: string,
+): string | undefined {
+  const raw = resolveAgentConfig(cfg, agentId)?.model;
+  if (!raw || typeof raw === "string") {
+    return undefined;
+  }
+  const execution = raw.execution?.trim();
+  return execution || undefined;
+}
+
 export function resolveAgentWorkspaceDir(cfg: OpenClawConfig, agentId: string) {
   const id = normalizeAgentId(agentId);
   const configured = resolveAgentConfig(cfg, id)?.workspace?.trim();

@@ -6,6 +6,7 @@ import { enqueueCommandInLane } from "../../process/command-queue.js";
 import { resolveUserPath } from "../../utils.js";
 import { isMarkdownCapableMessageChannel } from "../../utils/message-channel.js";
 import { resolveOpenClawAgentDir } from "../agent-paths.js";
+import { resolveAgentModelExecution, resolveSessionAgentId } from "../agent-scope.js";
 import {
   isProfileInCooldown,
   markAuthProfileFailure,
@@ -26,7 +27,7 @@ import {
   resolveAuthProfileOrder,
   type ResolvedProviderAuth,
 } from "../model-auth.js";
-import { normalizeProviderId } from "../model-selection.js";
+import { normalizeProviderId, parseModelRef } from "../model-selection.js";
 import { ensureOpenClawModelsJson } from "../models-config.js";
 import {
   classifyFailoverReason,
@@ -108,6 +109,47 @@ export async function runEmbeddedPiAgent(
       );
       if (!model) {
         throw new Error(error ?? `Unknown model: ${provider}/${modelId}`);
+      }
+
+      // Resolve execution model for dual-model architecture
+      const agentId = resolveSessionAgentId({
+        sessionKey: params.sessionKey,
+        config: params.config,
+      });
+      let executionModelRef = resolveAgentModelExecution(params.config ?? {}, agentId);
+      if (!executionModelRef && params.config?.agents?.defaults?.model) {
+        const def = params.config.agents.defaults.model;
+        if (typeof def === "object" && !Array.isArray(def)) {
+          executionModelRef = def.execution;
+        }
+      }
+      let executionProvider: string | undefined;
+      let executionModelId: string | undefined;
+      let executionModel: typeof model | undefined;
+      if (executionModelRef) {
+        const parsed = parseModelRef(executionModelRef, DEFAULT_PROVIDER);
+        if (parsed) {
+          executionProvider = parsed.provider;
+          executionModelId = parsed.model;
+          const resolved = resolveModel(
+            executionProvider,
+            executionModelId,
+            agentDir,
+            params.config,
+          );
+          if (resolved.model) {
+            executionModel = resolved.model;
+            log.info(
+              `dual-model: primary=${provider}/${modelId}, execution=${executionProvider}/${executionModelId}`,
+            );
+          } else {
+            log.warn(
+              `dual-model: execution model ${executionModelRef} not found, using primary only`,
+            );
+          }
+        } else {
+          log.warn(`dual-model: could not parse execution model ref: ${executionModelRef}`);
+        }
       }
 
       const ctxInfo = resolveContextWindowInfo({
@@ -341,6 +383,9 @@ export async function runEmbeddedPiAgent(
             model,
             authStorage,
             modelRegistry,
+            executionProvider,
+            executionModelId,
+            executionModel,
             thinkLevel,
             verboseLevel: params.verboseLevel,
             reasoningLevel: params.reasoningLevel,
