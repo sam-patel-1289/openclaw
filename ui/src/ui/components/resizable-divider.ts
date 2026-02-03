@@ -24,7 +24,7 @@ export class ResizableDivider extends LitElement {
       flex-shrink: 0;
       position: relative;
     }
-    
+
     :host::before {
       content: "";
       position: absolute;
@@ -33,20 +33,18 @@ export class ResizableDivider extends LitElement {
       right: -4px;
       bottom: 0;
     }
-    
+
     :host(:hover) {
       background: var(--accent, #007bff);
     }
-    
+
     :host(.dragging) {
       background: var(--accent, #007bff);
     }
   `;
 
   render() {
-    return html`
-      
-    `;
+    return html``;
   }
 
   connectedCallback() {
@@ -74,10 +72,14 @@ export class ResizableDivider extends LitElement {
   };
 
   private handleMouseMove = (e: MouseEvent) => {
-    if (!this.isDragging) return;
+    if (!this.isDragging) {
+      return;
+    }
 
     const container = this.parentElement;
-    if (!container) return;
+    if (!container) {
+      return;
+    }
 
     const containerWidth = container.getBoundingClientRect().width;
     const deltaX = e.clientX - this.startX;
