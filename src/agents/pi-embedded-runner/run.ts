@@ -116,7 +116,13 @@ export async function runEmbeddedPiAgent(
         sessionKey: params.sessionKey,
         config: params.config,
       });
-      const executionModelRef = resolveAgentModelExecution(params.config ?? {}, agentId);
+      let executionModelRef = resolveAgentModelExecution(params.config ?? {}, agentId);
+      if (!executionModelRef && params.config?.agents?.defaults?.model) {
+        const def = params.config.agents.defaults.model;
+        if (typeof def === "object" && !Array.isArray(def)) {
+          executionModelRef = def.execution;
+        }
+      }
       let executionProvider: string | undefined;
       let executionModelId: string | undefined;
       let executionModel: typeof model | undefined;
