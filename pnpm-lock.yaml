@@ -46,8 +46,8 @@ importers:
         specifier: 0.50.9
         version: 0.50.9(ws@8.19.0)(zod@4.3.6)
       '@mariozechner/pi-coding-agent':
-        specifier: 0.50.7
-        version: 0.50.7(ws@8.19.0)(zod@4.3.6)
+        specifier: 0.50.9
+        version: 0.50.9(ws@8.19.0)(zod@4.3.6)
       '@mariozechner/pi-tui':
         specifier: 0.50.7
         version: 0.50.7
@@ -1400,8 +1400,8 @@ packages:
     engines: {node: '>=20.0.0'}
     hasBin: true
 
-  '@mariozechner/pi-coding-agent@0.50.7':
-    resolution: {integrity: sha512-A3SK7VoVY/xVNoRyLWwKoLRBTJ1cBq8hfqIiKOuE9BPBimEONu7lr7BZF/ma8rbOakPfhJ5TvLHCegwW9RhnwQ==}
+  '@mariozechner/pi-coding-agent@0.50.9':
+    resolution: {integrity: sha512-XO1fc+UdGbFlOgRx9bVccimJWGquWwvgVlK2Sbr9tjnGNBOBq2G0SvYE6MHhzxIyL0MolqOT8IrMGJFus9tEOg==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
@@ -6430,13 +6430,13 @@ snapshots:
       - ws
       - zod
 
-  '@mariozechner/pi-coding-agent@0.50.7(ws@8.19.0)(zod@4.3.6)':
+  '@mariozechner/pi-coding-agent@0.50.9(ws@8.19.0)(zod@4.3.6)':
     dependencies:
       '@mariozechner/clipboard': 0.3.0
       '@mariozechner/jiti': 2.6.5
       '@mariozechner/pi-agent-core': 0.50.9(ws@8.19.0)(zod@4.3.6)
       '@mariozechner/pi-ai': 0.50.9(ws@8.19.0)(zod@4.3.6)
-      '@mariozechner/pi-tui': 0.50.7
+      '@mariozechner/pi-tui': 0.50.9
       '@silvia-odwyer/photon-node': 0.3.4
       chalk: 5.6.2
       cli-highlight: 2.1.11

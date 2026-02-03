@@ -482,6 +482,12 @@ export async function runEmbeddedAttempt(
       if (!session) {
         throw new Error("Embedded agent session missing");
       }
+      if (params.executionModel && session.agent) {
+        // Workaround: createAgentSession doesn't expose executionModel yet,
+        // but the underlying PiAgent might support it (or we monkey-patch it).
+        // @ts-expect-error - executionModel missing in PiAgent type definition?
+        session.agent.executionModel = params.executionModel;
+      }
       const activeSession = session;
       const cacheTrace = createCacheTrace({
         cfg: params.config,
